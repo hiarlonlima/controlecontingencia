@@ -5,9 +5,9 @@ operações de Facebook Ads — Perfis, BMs, vínculos, status, aquecimento,
 bloqueios e histórico de movimentações. Tudo organizado em Kanban,
 com dashboards operacionais, relatórios e tela de login.
 
-> Persistência local via `localStorage`. A camada de dados foi desenhada como um
-> contexto isolado (`DataContext`) para facilitar a troca por Supabase, SQLite,
-> Postgres ou qualquer backend real sem alterar componentes/UI.
+> Funciona em **dois modos**:
+> - **Local** (sem configuração) — usa `localStorage` do navegador, isolado por dispositivo.
+> - **Supabase** (recomendado pra uso real) — Postgres em nuvem, sync entre dispositivos, login real e backup automático.
 
 ---
 
@@ -18,6 +18,7 @@ com dashboards operacionais, relatórios e tela de login.
 - **@hello-pangea/dnd** — drag-and-drop entre colunas dos Kanbans
 - **react-router-dom 6** — roteamento e proteção de rotas
 - **lucide-react** — ícones
+- **@supabase/supabase-js** — backend (opcional)
 
 ---
 
@@ -29,10 +30,14 @@ Pré-requisitos: **Node 18+** e **npm** (ou pnpm / yarn / bun).
 # 1. Instalar dependências
 npm install
 
-# 2. Subir o servidor de desenvolvimento
+# 2. (opcional) Configurar Supabase — veja seção abaixo
+cp .env.example .env
+# edite .env com VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY
+
+# 3. Subir o servidor de desenvolvimento
 npm run dev
 
-# 3. Build de produção (gera /dist)
+# 4. Build de produção (gera /dist)
 npm run build
 npm run preview   # opcional: serve o build localmente
 ```
@@ -41,16 +46,71 @@ Por padrão a app sobe em `http://localhost:5173`.
 
 ### Acesso
 
-A primeira tela é o **Login**. Use a senha de teste:
+- **Modo local** (sem `.env`): senha de teste `admin123`, alterada em Configurações.
+- **Modo Supabase** (com `.env` configurado): tela de login pede e-mail e senha
+  cadastrados no painel do Supabase. Botão "Criar conta nova" também disponível.
 
+---
+
+## Configurando o Supabase (recomendado)
+
+Free tier do Supabase é mais que suficiente pra esta app (500MB DB, ilimitadas leituras).
+
+### 1) Criar projeto
+
+1. Vá em [supabase.com](https://supabase.com) → **New project**
+2. Escolha região mais próxima (ex.: `South America (São Paulo)`)
+3. Defina uma senha do banco (anote em local seguro)
+4. Aguarde ~1 minuto para provisionar
+
+### 2) Executar o schema
+
+1. No menu lateral: **SQL Editor** → **New query**
+2. Cole todo o conteúdo de [`supabase/schema.sql`](supabase/schema.sql)
+3. Clique **Run**. Vai criar duas tabelas (`fb_profiles`, `fb_bms`), índices,
+   triggers de `updated_at` e políticas de RLS.
+
+### 3) Pegar credenciais
+
+1. **Project Settings** → **API**
+2. Copie:
+   - **Project URL** → variável `VITE_SUPABASE_URL`
+   - **anon public** → variável `VITE_SUPABASE_ANON_KEY`
+
+> Nunca use a chave `service_role` no cliente — ela bypassa o RLS.
+
+### 4) Setar variáveis de ambiente
+
+**Local:**
+```bash
+cp .env.example .env
+# edite .env com os valores do passo anterior
 ```
-admin123
-```
 
-Ela pode ser alterada na tela **Configurações** (também guardada em `localStorage`).
+**Vercel/Netlify:**
+- Vercel: Project → Settings → Environment Variables → adicione as duas
+- Netlify: Site → Site settings → Environment variables → adicione as duas
+- Re-deploy depois de adicionar.
 
-Se for a primeira execução, dados mockados (10 perfis e 8 BMs com diferentes
-status) são plantados automaticamente para você ver o sistema em operação.
+### 5) Criar primeiro usuário
+
+1. **Authentication** → **Users** → **Add user** → **Create new user**
+2. Defina e-mail e senha (autoconfirme se quiser pular validação por e-mail)
+3. Pronto — agora faça login na app com essas credenciais.
+
+Para adicionar operadores, repita o passo 5 ou habilite signup público (não
+recomendado — desabilite em **Authentication → Sign In / Up → Allow new users to sign up**
+se for uso só interno).
+
+### Migrar dados do localStorage para o Supabase
+
+Se você já está usando em modo local e quer levar os dados:
+
+1. Em **Configurações** → exporte CSV de Perfis e BMs.
+2. Configure Supabase, faça login.
+3. Importe os mesmos CSVs nos Kanbans.
+
+> Observação: o CSV de BMs preserva contas de anúncio (formato JSON na coluna).
 
 ---
 
@@ -60,11 +120,15 @@ status) são plantados automaticamente para você ver o sistema em operação.
 src/
 ├── components/        → componentes reutilizáveis (Modal, KanbanBoard, Cards…)
 ├── context/           → AuthContext, DataContext, ToastContext
+├── lib/               → cliente Supabase, mappers DB↔JS, repositories
 ├── pages/             → uma página por rota (Dashboard, Kanbans, Cadastros, Relatórios, Configurações, Login)
 ├── utils/             → constantes, storage helpers, formatadores, CSV, mock data
 ├── App.jsx            → rotas
 ├── main.jsx           → bootstrap React
 └── index.css          → estilos base + camada de componentes Tailwind
+
+supabase/
+└── schema.sql         → DDL para criar tabelas, RLS e triggers no Supabase
 ```
 
 ---
@@ -75,7 +139,8 @@ src/
 - **Kanban de Perfis** com 7 colunas, drag-and-drop, busca, filtros e modo compacto
 - **Kanban de BMs** com 8 colunas, drag-and-drop, busca, filtros e modo compacto
 - **Cadastro rápido** de Perfil e BM com validação dos campos obrigatórios
-- **Modal de detalhes** com 3 abas (Detalhes, Acesso & Segurança / Vínculos, Histórico & Notas)
+- **Editor estruturado de contas de anúncio** — nome, ID, status (boa/mediana/ruim/preparação/bloqueada), tier (T1–T4/Low) e observação por conta
+- **Modal de detalhes** com abas (Detalhes, Acesso & Segurança / Vínculos, Histórico & Notas)
 - **Histórico automático** de criação, mudanças de status, edições e notas
 - **Anotações rápidas** por ativo
 - **Senhas e 2FA ocultos** por padrão, com toggle de visualização e cópia
@@ -86,6 +151,7 @@ src/
 - **Tela de login** protegendo todas as rotas privadas
 - **Alertas de inatividade** — cards e dashboard destacam ativos parados há X dias
 - **Idade do ativo** visível em cada card
+- **Modo dual** Supabase ↔ localStorage com fallback automático
 
 ---
 
@@ -109,7 +175,10 @@ src/
 ```ts
 {
   id, nome, bmId,
-  perfilDono, perfisVinculados, contasAnuncio,
+  perfilDono, perfisVinculados,
+  contasAnuncio: [
+    { nome, id, status, tier, observacao }
+  ],
   metodoPagamento, limiteDiario,
   status, prioridade, pais,
   dominios, paginas,
@@ -121,48 +190,36 @@ src/
 
 ---
 
-## Persistência: como funciona hoje
+## Modos de persistência
 
-A app usa **`localStorage` do navegador**. Isso significa:
+| Aspecto                    | Modo local (`localStorage`) | Modo Supabase           |
+| -------------------------- | --------------------------- | ----------------------- |
+| Configuração necessária    | Nenhuma                     | `.env` + executar SQL   |
+| Sync entre dispositivos    | ❌ Não                       | ✅ Sim                   |
+| Multi-usuário              | ❌ Não                       | ✅ Sim (RLS + Auth)      |
+| Backup automático          | ❌ Não                       | ✅ Sim (Supabase backup) |
+| Custo                      | Grátis                      | Grátis (free tier)      |
+| Funciona offline           | ✅ Sim                       | ⚠️ Apenas leitura cache |
 
-- ✅ Suas alterações **ficam salvas** automaticamente no mesmo navegador.
-- ✅ Não precisa de banco de dados nem servidor pra rodar — basta hospedar como
-  site estático.
-- ⚠️ Os dados ficam **isolados por navegador/dispositivo**. Se você abrir em outro
-  computador ou apagar o cache, começa do zero.
-- ⚠️ Não há backup automático — recomendo usar o **Exportar CSV** dos Kanbans
-  periodicamente.
+A app detecta automaticamente: se as duas variáveis `VITE_SUPABASE_*` estiverem
+definidas no build, usa Supabase; senão, cai pra `localStorage`.
 
-Para uso multi-dispositivo ou em equipe, conecte um backend real (próxima seção).
+---
 
 ## Deploy (estático)
 
 Como é uma SPA Vite, basta hospedar a pasta `dist/`. Já incluí configs prontos:
 
 - **Vercel** — `vercel.json` na raiz. Em [vercel.com](https://vercel.com) clique em
-  "Import Project", escolha este repositório e dê deploy. Detecta Vite
-  automaticamente.
+  "Import Project", escolha o repositório, **adicione as duas vars `VITE_SUPABASE_*`**
+  em Environment Variables e dê deploy. Detecta Vite automaticamente.
 - **Netlify** — `netlify.toml` na raiz. Mesma ideia em
-  [netlify.com](https://netlify.com).
+  [netlify.com](https://netlify.com), também adicionando as env vars.
 - **Cloudflare Pages**, **GitHub Pages**, **Render Static** — funcionam igual,
-  só configure: build = `npm run build`, output = `dist`, e adicione um rewrite
-  de `/*` → `/index.html` (já incluído nos arquivos acima para SPA routing).
+  só configure: build = `npm run build`, output = `dist`, com rewrite
+  de `/*` → `/index.html` para SPA routing.
 
-Nenhuma variável de ambiente é necessária no MVP.
-
-## Trocando o storage por um backend real
-
-Toda a leitura/escrita de dados está concentrada em
-[`src/context/DataContext.jsx`](src/context/DataContext.jsx) e nos helpers de
-[`src/utils/storage.js`](src/utils/storage.js).
-
-Para conectar Supabase/Postgres/SQLite:
-
-1. Substitua `loadJSON` / `saveJSON` por chamadas ao seu cliente.
-2. Em `DataProvider`, troque os `useEffect` que carregam/persistem por `useEffect`
-   que chamam o backend.
-3. Os componentes (Cards, Modais, Páginas) **não** precisam mudar — todos
-   consomem o estado e as actions via `useData()`.
+> Sem env vars: deploy funciona, mas em modo local (cada visitante tem seus próprios dados).
 
 ---
 
@@ -173,14 +230,16 @@ Para conectar Supabase/Postgres/SQLite:
 - Tecla `Esc` fecha o modal.
 - Vírgula ou Enter cria uma tag em qualquer campo de tags.
 - Senhas têm botão de cópia + visualização.
+- "Restaurar mock" em Configurações repõe os 10 perfis + 8 BMs de exemplo
+  (funciona em ambos os modos — escreve direto no banco no modo Supabase).
 
 ---
 
 ## Próximos passos sugeridos
 
-- Conectar com Supabase para sincronização real entre máquinas/usuários.
-- Adicionar autenticação por usuário (multi-operador) com auditoria.
-- Webhook/Email para alertas críticos.
+- Realtime Supabase para ver mudanças de outros operadores ao vivo.
+- Auditoria por usuário (`autor` no histórico já existe — basta usar `auth.user.email`).
+- Webhook/Email para alertas críticos (perfis bloqueados).
 - Histórico filtrável dentro de cada modal (por tipo, autor).
 - Versão mobile do Kanban (atualmente o foco é desktop).
 
