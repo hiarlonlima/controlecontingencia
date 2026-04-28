@@ -166,7 +166,14 @@ export default function Login() {
                 <input
                   type={show ? 'text' : 'password'}
                   autoFocus={!isSupabase}
-                  autoComplete={isSignUp ? 'new-password' : 'current-password'}
+                  autoComplete={
+                    isSupabase
+                      ? isSignUp
+                        ? 'new-password'
+                        : 'current-password'
+                      : 'off'
+                  }
+                  name={isSupabase ? 'password' : 'cfb-admin-pass'}
                   required
                   value={password}
                   onChange={(e) => {
@@ -175,6 +182,8 @@ export default function Login() {
                   }}
                   placeholder="••••••••"
                   className="input pr-11"
+                  spellCheck={false}
+                  data-form-type="other"
                 />
                 <button
                   type="button"
