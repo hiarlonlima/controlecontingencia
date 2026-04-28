@@ -1,0 +1,19 @@
+node_modules
+dist
+dist-ssr
+.vite
+*.log
+.env
+.env.local
+.DS_Store
+
+# Editor / harness
+.claude
+.idea
+.vscode
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
