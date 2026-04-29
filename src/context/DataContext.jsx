@@ -30,13 +30,21 @@ function normalizeBM(bm) {
     ...bm,
     contasAnuncio: (bm.contasAnuncio || []).map((c) => {
       if (typeof c === 'string') {
-        return { nome: '', id: c, status: 'preparacao', tier: 't2', observacao: '' }
+        return {
+          nome: '',
+          id: c,
+          status: 'preparacao',
+          tier: 't2',
+          moeda: 'brl',
+          observacao: '',
+        }
       }
       return {
         nome: c?.nome ?? '',
         id: c?.id ?? '',
         status: c?.status ?? 'preparacao',
         tier: c?.tier ?? 't2',
+        moeda: c?.moeda ?? 'brl',
         observacao: c?.observacao ?? '',
       }
     }),
@@ -127,6 +135,7 @@ export function DataProvider({ children }) {
         status: 'novo',
         nivelConfianca: 'medio',
         pais: 'Brasil',
+        nacionalidade: 'br',
         proxy: '',
         telefone: '',
         bmVinculada: '',
@@ -326,6 +335,7 @@ export function DataProvider({ children }) {
         status: 'nova',
         verificacao: 'nao_verificada',
         pais: 'Brasil',
+        nacionalidade: 'br',
         dominios: [],
         paginas: [],
         observacoes: '',

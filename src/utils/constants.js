@@ -27,6 +27,18 @@ export const CONFIDENCE_LEVELS = [
   { id: 'alto', label: 'Alto', tone: 'emerald' },
 ]
 
+// Nacionalidade do perfil/BM (mostrado com bandeira no card)
+export const NACIONALIDADES = [
+  { id: 'br', label: 'Brasileiro', emoji: '🇧🇷', tone: 'emerald' },
+  { id: 'us', label: 'Americano', emoji: '🇺🇸', tone: 'sky' },
+]
+
+// Moeda da conta de anúncio
+export const MOEDAS = [
+  { id: 'brl', label: 'BRL', emoji: '🇧🇷', tone: 'emerald' },
+  { id: 'usd', label: 'USD', emoji: '🇺🇸', tone: 'sky' },
+]
+
 // Estado de verificação Meta da BM (selo/em análise/não verificada)
 export const BM_VERIFICACOES = [
   { id: 'nao_verificada', label: 'Não verificada', tone: 'slate' },
@@ -69,6 +81,10 @@ export const AD_ACCOUNT_STATUS_MAP = Object.fromEntries(
 export const AD_ACCOUNT_TIER_MAP = Object.fromEntries(
   AD_ACCOUNT_TIERS.map((t) => [t.id, t]),
 )
+export const NACIONALIDADE_MAP = Object.fromEntries(
+  NACIONALIDADES.map((n) => [n.id, n]),
+)
+export const MOEDA_MAP = Object.fromEntries(MOEDAS.map((m) => [m.id, m]))
 
 // Status considerados "disponível para uso" / "perdido"
 export const PROFILE_AVAILABLE = ['pronto']

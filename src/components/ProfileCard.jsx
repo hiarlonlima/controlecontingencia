@@ -9,6 +9,7 @@ import {
 } from 'lucide-react'
 import {
   CONFIDENCE_MAP,
+  NACIONALIDADE_MAP,
   PROFILE_STATUS_MAP,
   TAG_TONES,
   TONE_STYLES,
@@ -26,6 +27,7 @@ export default function ProfileCard({
 }) {
   const status = PROFILE_STATUS_MAP[profile.status] ?? PROFILE_STATUS_MAP.novo
   const confidence = CONFIDENCE_MAP[profile.nivelConfianca] ?? CONFIDENCE_MAP.medio
+  const nacionalidade = NACIONALIDADE_MAP[profile.nacionalidade] ?? NACIONALIDADE_MAP.br
   const linkedBM = bms?.find((b) => b.id === profile.bmVinculada)
   const idleDays = daysBetween(profile.updatedAt)
   const showAlert =
@@ -64,6 +66,16 @@ export default function ProfileCard({
       <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
         <StatusBadge tone={status.tone} label={status.label} />
         <StatusBadge tone={confidence.tone} label={`Conf. ${confidence.label}`} />
+        <StatusBadge
+          tone={nacionalidade.tone}
+          dot={false}
+          label={
+            <span className="inline-flex items-center gap-1">
+              <span className="text-[12px] leading-none">{nacionalidade.emoji}</span>
+              {nacionalidade.label}
+            </span>
+          }
+        />
       </div>
 
       {!compact && (

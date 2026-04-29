@@ -1,6 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Save, Trash2, Send, History, AlertTriangle } from 'lucide-react'
-import { BM_STATUSES, BM_STATUS_MAP, BM_VERIFICACOES } from '../utils/constants.js'
+import {
+  BM_STATUSES,
+  BM_STATUS_MAP,
+  BM_VERIFICACOES,
+  NACIONALIDADES,
+} from '../utils/constants.js'
 import { formatDateTime } from '../utils/format.js'
 import { useData } from '../context/DataContext.jsx'
 import { useToast } from '../context/ToastContext.jsx'
@@ -250,6 +255,20 @@ export default function BMModal({ open, bm, onClose }) {
                 Status do dono: {dono.status}
               </p>
             )}
+          </div>
+          <div>
+            <label className="label mb-1.5 block">Nacionalidade</label>
+            <select
+              className="input"
+              value={form.nacionalidade || 'br'}
+              onChange={(e) => set('nacionalidade', e.target.value)}
+            >
+              {NACIONALIDADES.map((n) => (
+                <option key={n.id} value={n.id}>
+                  {n.emoji} {n.label}
+                </option>
+              ))}
+            </select>
           </div>
           <div>
             <label className="label mb-1.5 block">País / Região</label>

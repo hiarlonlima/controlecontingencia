@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Save, Trash2, Send, History, AlertTriangle } from 'lucide-react'
 import {
   CONFIDENCE_LEVELS,
+  NACIONALIDADES,
   PROFILE_STATUSES,
   PROFILE_STATUS_MAP,
 } from '../utils/constants.js'
@@ -257,6 +258,20 @@ export default function ProfileModal({ open, profile, onClose }) {
           </div>
 
           <div>
+            <label className="label mb-1.5 block">Nacionalidade</label>
+            <select
+              className="input"
+              value={form.nacionalidade || 'br'}
+              onChange={(e) => set('nacionalidade', e.target.value)}
+            >
+              {NACIONALIDADES.map((n) => (
+                <option key={n.id} value={n.id}>
+                  {n.emoji} {n.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
             <label className="label mb-1.5 block">País / Região</label>
             <input
               className="input"
@@ -264,7 +279,7 @@ export default function ProfileModal({ open, profile, onClose }) {
               onChange={(e) => set('pais', e.target.value)}
             />
           </div>
-          <div>
+          <div className="md:col-span-2">
             <label className="label mb-1.5 block">Telefone / Chip</label>
             <input
               className="input"

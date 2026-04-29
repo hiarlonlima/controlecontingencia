@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Building2, Save } from 'lucide-react'
-import { BM_STATUSES, BM_VERIFICACOES } from '../utils/constants.js'
+import { BM_STATUSES, BM_VERIFICACOES, NACIONALIDADES } from '../utils/constants.js'
 import { useData } from '../context/DataContext.jsx'
 import { useToast } from '../context/ToastContext.jsx'
 import AdAccountsEditor from '../components/AdAccountsEditor.jsx'
@@ -18,6 +18,7 @@ const initialState = {
   limiteDiario: '',
   status: 'nova',
   verificacao: 'nao_verificada',
+  nacionalidade: 'br',
   pais: 'Brasil',
   dominios: '',
   paginas: '',
@@ -181,11 +182,26 @@ export default function CadastroBM() {
               )}
             </div>
             <div>
+              <label className="label mb-1.5 block">Nacionalidade</label>
+              <select
+                className="input"
+                value={form.nacionalidade}
+                onChange={(e) => set('nacionalidade', e.target.value)}
+              >
+                {NACIONALIDADES.map((n) => (
+                  <option key={n.id} value={n.id}>
+                    {n.emoji} {n.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
               <label className="label mb-1.5 block">País / Região</label>
               <input
                 className="input"
                 value={form.pais}
                 onChange={(e) => set('pais', e.target.value)}
+                placeholder="Ex.: Brasil, Estados Unidos"
               />
             </div>
 

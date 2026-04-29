@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Save, UserPlus } from 'lucide-react'
-import { CONFIDENCE_LEVELS, PROFILE_STATUSES } from '../utils/constants.js'
+import { CONFIDENCE_LEVELS, NACIONALIDADES, PROFILE_STATUSES } from '../utils/constants.js'
 import { useData } from '../context/DataContext.jsx'
 import { useToast } from '../context/ToastContext.jsx'
 import PageHeader from '../components/PageHeader.jsx'
@@ -20,6 +20,7 @@ const initialState = {
   dataCriacaoFacebook: '',
   status: 'novo',
   nivelConfianca: 'medio',
+  nacionalidade: 'br',
   pais: 'Brasil',
   proxy: '',
   telefone: '',
@@ -187,14 +188,29 @@ export default function CadastroPerfil() {
             </div>
 
             <div>
+              <label className="label mb-1.5 block">Nacionalidade</label>
+              <select
+                className="input"
+                value={form.nacionalidade}
+                onChange={(e) => set('nacionalidade', e.target.value)}
+              >
+                {NACIONALIDADES.map((n) => (
+                  <option key={n.id} value={n.id}>
+                    {n.emoji} {n.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
               <label className="label mb-1.5 block">País / Região</label>
               <input
                 className="input"
                 value={form.pais}
                 onChange={(e) => set('pais', e.target.value)}
+                placeholder="Ex.: Brasil, Estados Unidos"
               />
             </div>
-            <div>
+            <div className="md:col-span-2">
               <label className="label mb-1.5 block">Telefone / Chip</label>
               <input
                 className="input"

@@ -3,6 +3,7 @@ import {
   AD_ACCOUNT_STATUSES,
   AD_ACCOUNT_STATUS_MAP,
   AD_ACCOUNT_TIERS,
+  MOEDAS,
   TONE_STYLES,
 } from '../utils/constants.js'
 
@@ -28,7 +29,14 @@ export default function AdAccountsEditor({ value = [], onChange }) {
   function add() {
     onChange?.([
       ...value,
-      { nome: '', id: '', status: 'preparacao', tier: 't2', observacao: '' },
+      {
+        nome: '',
+        id: '',
+        status: 'preparacao',
+        tier: 't2',
+        moeda: 'brl',
+        observacao: '',
+      },
     ])
   }
   function update(idx, patch) {
@@ -113,6 +121,19 @@ export default function AdAccountsEditor({ value = [], onChange }) {
               {AD_ACCOUNT_TIERS.map((t) => (
                 <option key={t.id} value={t.id}>
                   {t.label}
+                </option>
+              ))}
+            </select>
+            <select
+              value={acc.moeda || 'brl'}
+              onChange={(e) => update(idx, { moeda: e.target.value })}
+              className="input w-24 py-1.5 text-xs"
+              aria-label="Moeda da conta"
+              title="Moeda"
+            >
+              {MOEDAS.map((m) => (
+                <option key={m.id} value={m.id}>
+                  {m.emoji} {m.label}
                 </option>
               ))}
             </select>

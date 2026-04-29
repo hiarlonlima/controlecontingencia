@@ -11,6 +11,7 @@ import {
 import {
   AD_ACCOUNT_STATUSES,
   BM_STATUS_MAP,
+  NACIONALIDADE_MAP,
   TAG_TONES,
   TONE_STYLES,
 } from '../utils/constants.js'
@@ -37,6 +38,7 @@ export default function BMCard({
   const verificacao = bm.verificacao || 'nao_verificada'
   const isVerified = verificacao === 'verificada'
   const isAnalyzing = verificacao === 'em_analise'
+  const nacionalidade = NACIONALIDADE_MAP[bm.nacionalidade] ?? NACIONALIDADE_MAP.br
 
   return (
     <div
@@ -81,6 +83,16 @@ export default function BMCard({
 
       <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
         <StatusBadge tone={status.tone} label={status.label} />
+        <StatusBadge
+          tone={nacionalidade.tone}
+          dot={false}
+          label={
+            <span className="inline-flex items-center gap-1">
+              <span className="text-[12px] leading-none">{nacionalidade.emoji}</span>
+              {nacionalidade.label}
+            </span>
+          }
+        />
         {isAnalyzing && <StatusBadge tone="amber" label="Verif. em análise" />}
         {bm.metodoPagamento ? (
           <StatusBadge tone="emerald" label="Pagto OK" />
