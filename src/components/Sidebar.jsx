@@ -6,6 +6,7 @@ import {
   Building2,
   FileBarChart2,
   Flame,
+  ScrollText,
   Settings,
   LogOut,
   ShieldCheck,
@@ -19,6 +20,7 @@ const NAV = [
   { to: '/cadastro/perfil', label: 'Cadastro de Perfil', icon: UserPlus },
   { to: '/cadastro/bm', label: 'Cadastro de BM', icon: Building2 },
   { to: '/aquecimentos', label: 'Aquecimentos', icon: Flame },
+  { to: '/logs', label: 'Logs', icon: ScrollText },
   { to: '/relatorios', label: 'Relatórios', icon: FileBarChart2 },
   { to: '/configuracoes', label: 'Configurações', icon: Settings },
 ]

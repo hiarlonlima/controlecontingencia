@@ -37,6 +37,7 @@ function normalizeBM(bm) {
           tier: 't2',
           moeda: 'brl',
           observacao: '',
+          logs: [],
         }
       }
       return {
@@ -46,6 +47,7 @@ function normalizeBM(bm) {
         tier: c?.tier ?? 't2',
         moeda: c?.moeda ?? 'brl',
         observacao: c?.observacao ?? '',
+        logs: Array.isArray(c?.logs) ? c.logs : [],
       }
     }),
   }
@@ -489,6 +491,81 @@ export function DataProvider({ children }) {
     [toast],
   )
 
+  const addAdAccountLog = useCallback(
+    (bmId, adIndex, text) => {
+      if (!text?.trim()) return
+      const now = nowISO()
+      let updated = null
+      let original = null
+      setBMs((prev) =>
+        prev.map((b) => {
+          if (b.id !== bmId) return b
+          original = b
+          const newContas = (b.contasAnuncio || []).map((c, i) => {
+            if (i !== adIndex) return c
+            return {
+              ...c,
+              logs: [
+                {
+                  id: uid('l'),
+                  texto: text.trim(),
+                  autor: 'admin',
+                  data: now,
+                },
+                ...(c.logs || []),
+              ],
+            }
+          })
+          updated = { ...b, updatedAt: now, contasAnuncio: newContas }
+          return updated
+        }),
+      )
+      if (updated) {
+        withRemote(
+          () => upsertBM(updated),
+          null,
+          () => {
+            if (original) {
+              setBMs((prev) => prev.map((b) => (b.id === bmId ? original : b)))
+            }
+          },
+        )
+      }
+    },
+    [toast],
+  )
+
+  const deleteAdAccountLog = useCallback(
+    (bmId, adIndex, logId) => {
+      let updated = null
+      let original = null
+      setBMs((prev) =>
+        prev.map((b) => {
+          if (b.id !== bmId) return b
+          original = b
+          const newContas = (b.contasAnuncio || []).map((c, i) => {
+            if (i !== adIndex) return c
+            return { ...c, logs: (c.logs || []).filter((l) => l.id !== logId) }
+          })
+          updated = { ...b, updatedAt: nowISO(), contasAnuncio: newContas }
+          return updated
+        }),
+      )
+      if (updated) {
+        withRemote(
+          () => upsertBM(updated),
+          null,
+          () => {
+            if (original) {
+              setBMs((prev) => prev.map((b) => (b.id === bmId ? original : b)))
+            }
+          },
+        )
+      }
+    },
+    [toast],
+  )
+
   const deleteBM = useCallback(
     (id) => {
       const original = bms.find((b) => b.id === id)
@@ -568,6 +645,8 @@ export function DataProvider({ children }) {
       updateBM,
       moveBMStatus,
       addBMNote,
+      addAdAccountLog,
+      deleteAdAccountLog,
       deleteBM,
       replaceProfiles,
       replaceBMs,
@@ -587,6 +666,8 @@ export function DataProvider({ children }) {
       updateBM,
       moveBMStatus,
       addBMNote,
+      addAdAccountLog,
+      deleteAdAccountLog,
       deleteBM,
       replaceProfiles,
       replaceBMs,

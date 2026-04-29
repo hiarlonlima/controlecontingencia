@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard.jsx'
 import KanbanBMs from './pages/KanbanBMs.jsx'
 import KanbanProfiles from './pages/KanbanProfiles.jsx'
 import Login from './pages/Login.jsx'
+import Logs from './pages/Logs.jsx'
 import Relatorios from './pages/Relatorios.jsx'
 
 export default function App() {
@@ -29,6 +30,7 @@ export default function App() {
         <Route path="cadastro/perfil" element={<CadastroPerfil />} />
         <Route path="cadastro/bm" element={<CadastroBM />} />
         <Route path="aquecimentos" element={<Aquecimentos />} />
+        <Route path="logs" element={<Logs />} />
         <Route path="relatorios" element={<Relatorios />} />
         <Route path="configuracoes" element={<Configuracoes />} />
       </Route>
