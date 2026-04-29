@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import Layout from './components/Layout.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
+import Aquecimentos from './pages/Aquecimentos.jsx'
 import CadastroBM from './pages/CadastroBM.jsx'
 import CadastroPerfil from './pages/CadastroPerfil.jsx'
 import Configuracoes from './pages/Configuracoes.jsx'
@@ -27,6 +28,7 @@ export default function App() {
         <Route path="kanban/bms" element={<KanbanBMs />} />
         <Route path="cadastro/perfil" element={<CadastroPerfil />} />
         <Route path="cadastro/bm" element={<CadastroBM />} />
+        <Route path="aquecimentos" element={<Aquecimentos />} />
         <Route path="relatorios" element={<Relatorios />} />
         <Route path="configuracoes" element={<Configuracoes />} />
       </Route>
