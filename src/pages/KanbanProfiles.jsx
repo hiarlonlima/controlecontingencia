@@ -121,7 +121,6 @@ export default function KanbanProfiles() {
           contaAnuncioVinculada: row['Conta Anuncio'] || '',
           observacoes: row['Observacoes'] || '',
           tags: (row['Tags'] || '').split('|').map((t) => t.trim()).filter(Boolean),
-          prioridade: 'media',
           historico: [
             {
               id: `h_${Date.now()}_${idx}`,

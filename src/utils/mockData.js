@@ -24,7 +24,6 @@ const profileTemplates = [
     contaAnuncioVinculada: 'AD-7841',
     observacoes: 'Conta antiga com bom histórico, rodando campanha principal de e-commerce.',
     tags: ['premium', 'ecom'],
-    prioridade: 'alta',
   },
   {
     nome: 'Bruno Lacerda',
@@ -43,7 +42,6 @@ const profileTemplates = [
     contaAnuncioVinculada: '',
     observacoes: 'Aquecendo com curtidas e grupos. Ainda sem campanhas.',
     tags: ['aquecimento'],
-    prioridade: 'media',
   },
   {
     nome: 'Camila Souza',
@@ -62,7 +60,6 @@ const profileTemplates = [
     contaAnuncioVinculada: '',
     observacoes: 'Recém comprada, ainda não iniciei aquecimento.',
     tags: ['standard'],
-    prioridade: 'baixa',
   },
   {
     nome: 'Diego Martins',
@@ -81,7 +78,6 @@ const profileTemplates = [
     contaAnuncioVinculada: 'AD-3344',
     observacoes: 'Conta aged disponível. Aguardando atribuir BM.',
     tags: ['aged', 'reserva'],
-    prioridade: 'alta',
   },
   {
     nome: 'Eduardo Pires',
@@ -100,7 +96,6 @@ const profileTemplates = [
     contaAnuncioVinculada: 'AD-2210',
     observacoes: 'Recebeu alerta de identidade. Em revisão.',
     tags: ['atencao'],
-    prioridade: 'alta',
   },
   {
     nome: 'Fernanda Reis',
@@ -119,7 +114,6 @@ const profileTemplates = [
     contaAnuncioVinculada: 'AD-1102',
     observacoes: 'Bloqueada após escala em campanha de infoproduto.',
     tags: ['bloqueio'],
-    prioridade: 'baixa',
   },
   {
     nome: 'Gabriel Tavares',
@@ -138,7 +132,6 @@ const profileTemplates = [
     contaAnuncioVinculada: '',
     observacoes: 'Aquecendo com 2 grupos e marketplace.',
     tags: ['aquecimento'],
-    prioridade: 'media',
   },
   {
     nome: 'Helena Duarte',
@@ -157,7 +150,6 @@ const profileTemplates = [
     contaAnuncioVinculada: 'AD-9921',
     observacoes: 'Rodando bem em campanha de lead.',
     tags: ['premium', 'leadgen'],
-    prioridade: 'alta',
   },
   {
     nome: 'Igor Lima',
@@ -176,7 +168,6 @@ const profileTemplates = [
     contaAnuncioVinculada: '',
     observacoes: 'Descartado por excesso de quedas.',
     tags: ['descarte'],
-    prioridade: 'baixa',
   },
   {
     nome: 'Júlia Rocha',
@@ -195,7 +186,6 @@ const profileTemplates = [
     contaAnuncioVinculada: '',
     observacoes: 'Conta nova, aguardando entrar em aquecimento.',
     tags: ['standard'],
-    prioridade: 'media',
   },
 ]
 
@@ -212,12 +202,12 @@ const bmTemplates = [
     metodoPagamento: true,
     limiteDiario: 'R$ 5.000',
     status: 'em_uso',
+    verificacao: 'verificada',
     pais: 'Brasil',
     dominios: ['lojaprincipal.com.br'],
     paginas: ['Loja Principal Oficial'],
     observacoes: 'BM forte. Mantém limite alto.',
     tags: ['premium', 'ecom'],
-    prioridade: 'alta',
   },
   {
     nome: 'BM Reserva #2',
@@ -230,12 +220,12 @@ const bmTemplates = [
     metodoPagamento: true,
     limiteDiario: 'R$ 1.500',
     status: 'pronta',
+    verificacao: 'em_analise',
     pais: 'Brasil',
     dominios: [],
     paginas: ['Reserva Oficial'],
     observacoes: 'Pronta para entrar caso a primária caia.',
     tags: ['reserva'],
-    prioridade: 'alta',
   },
   {
     nome: 'BM Aquecimento Beta',
@@ -249,12 +239,12 @@ const bmTemplates = [
     metodoPagamento: false,
     limiteDiario: '',
     status: 'preparacao',
+    verificacao: 'nao_verificada',
     pais: 'Brasil',
     dominios: [],
     paginas: [],
     observacoes: 'Em preparação. Vincular método de pagamento.',
     tags: ['aquecimento'],
-    prioridade: 'media',
   },
   {
     nome: 'BM Lead Pro',
@@ -269,12 +259,12 @@ const bmTemplates = [
     metodoPagamento: true,
     limiteDiario: 'R$ 2.500',
     status: 'em_uso',
+    verificacao: 'verificada',
     pais: 'Brasil',
     dominios: ['leadpro.com.br'],
     paginas: ['Lead Pro'],
     observacoes: 'Operando captação de leads.',
     tags: ['leadgen'],
-    prioridade: 'alta',
   },
   {
     nome: 'BM Restrita Ômega',
@@ -288,12 +278,12 @@ const bmTemplates = [
     metodoPagamento: true,
     limiteDiario: 'R$ 800',
     status: 'restricao',
+    verificacao: 'nao_verificada',
     pais: 'Brasil',
     dominios: ['ofertasomega.com'],
     paginas: ['Ofertas Ômega'],
     observacoes: 'Recebeu aviso de pagamento. Recurso enviado.',
     tags: ['atencao'],
-    prioridade: 'alta',
   },
   {
     nome: 'BM Em Análise Sigma',
@@ -306,12 +296,12 @@ const bmTemplates = [
     metodoPagamento: false,
     limiteDiario: '',
     status: 'analise',
+    verificacao: 'em_analise',
     pais: 'Brasil',
     dominios: [],
     paginas: [],
     observacoes: 'BM nova, em verificação inicial pelo Meta.',
     tags: ['novidade'],
-    prioridade: 'media',
   },
   {
     nome: 'BM Bloqueada Delta',
@@ -325,12 +315,12 @@ const bmTemplates = [
     metodoPagamento: true,
     limiteDiario: 'R$ 0',
     status: 'bloqueada',
+    verificacao: 'nao_verificada',
     pais: 'Brasil',
     dominios: ['deltaofertas.com'],
     paginas: ['Delta Ofertas'],
     observacoes: 'Bloqueada por política de pagamento. Sem recurso possível.',
     tags: ['bloqueio'],
-    prioridade: 'baixa',
   },
   {
     nome: 'BM Nova Phi',
@@ -341,12 +331,12 @@ const bmTemplates = [
     metodoPagamento: false,
     limiteDiario: '',
     status: 'nova',
+    verificacao: 'nao_verificada',
     pais: 'Brasil',
     dominios: [],
     paginas: [],
     observacoes: 'BM recém-criada.',
     tags: ['standard'],
-    prioridade: 'baixa',
   },
 ]
 
@@ -372,7 +362,6 @@ export function buildMockData() {
     contaAnuncioVinculada: t.contaAnuncioVinculada || '',
     observacoes: t.observacoes,
     tags: t.tags,
-    prioridade: t.prioridade,
     historico: [
       {
         id: uid('h'),
@@ -408,12 +397,12 @@ export function buildMockData() {
       metodoPagamento: t.metodoPagamento,
       limiteDiario: t.limiteDiario,
       status: t.status,
+      verificacao: t.verificacao || 'nao_verificada',
       pais: t.pais,
       dominios: t.dominios,
       paginas: t.paginas,
       observacoes: t.observacoes,
       tags: t.tags,
-      prioridade: t.prioridade,
       historico: [
         {
           id: uid('h'),

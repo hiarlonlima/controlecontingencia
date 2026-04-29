@@ -4,7 +4,6 @@ import {
   CONFIDENCE_LEVELS,
   PROFILE_STATUSES,
   PROFILE_STATUS_MAP,
-  PRIORITIES,
 } from '../utils/constants.js'
 import { formatDateTime } from '../utils/format.js'
 import { useData } from '../context/DataContext.jsx'
@@ -224,27 +223,13 @@ export default function ProfileModal({ open, profile, onClose }) {
             </select>
           </div>
 
-          <div>
+          <div className="md:col-span-2">
             <label className="label mb-1.5 block">Fornecedor</label>
             <input
               className="input"
               value={form.fornecedor}
               onChange={(e) => set('fornecedor', e.target.value)}
             />
-          </div>
-          <div>
-            <label className="label mb-1.5 block">Prioridade</label>
-            <select
-              className="input"
-              value={form.prioridade}
-              onChange={(e) => set('prioridade', e.target.value)}
-            >
-              {PRIORITIES.map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.label}
-                </option>
-              ))}
-            </select>
           </div>
 
           <div>

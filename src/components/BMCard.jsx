@@ -1,5 +1,6 @@
 import {
   AlertTriangle,
+  BadgeCheck,
   CalendarDays,
   Clock4,
   CreditCard,
@@ -33,6 +34,9 @@ export default function BMCard({
   const adCounts = countAdAccountsByStatus(bm.contasAnuncio)
   const adTotal = bm.contasAnuncio?.length || 0
   const activeStatuses = AD_ACCOUNT_STATUSES.filter((s) => adCounts[s.id])
+  const verificacao = bm.verificacao || 'nao_verificada'
+  const isVerified = verificacao === 'verificada'
+  const isAnalyzing = verificacao === 'em_analise'
 
   return (
     <div
@@ -43,7 +47,17 @@ export default function BMCard({
     >
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <p className="truncate text-sm font-semibold text-slate-50">{bm.nome || '—'}</p>
+          <p className="flex items-center gap-1.5 text-sm font-semibold text-slate-50">
+            <span className="truncate">{bm.nome || '—'}</span>
+            {isVerified && (
+              <BadgeCheck
+                size={14}
+                className="shrink-0 text-cyan-300"
+                title="BM verificada pelo Meta"
+                aria-label="Verificada"
+              />
+            )}
+          </p>
           <p className="mt-0.5 flex items-center gap-1 truncate font-mono text-[11px] text-slate-500">
             <Hash size={10} />
             {bm.bmId || '—'}
@@ -65,6 +79,7 @@ export default function BMCard({
 
       <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
         <StatusBadge tone={status.tone} label={status.label} />
+        {isAnalyzing && <StatusBadge tone="amber" label="Verif. em análise" />}
         {bm.metodoPagamento ? (
           <StatusBadge tone="emerald" label="Pagto OK" />
         ) : (

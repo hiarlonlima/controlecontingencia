@@ -29,6 +29,7 @@ const CSV_COLUMNS = [
   },
   { key: 'metodoPagamento', label: 'Pagamento', value: (r) => (r.metodoPagamento ? 'sim' : 'nao') },
   { key: 'limiteDiario', label: 'Limite Diario' },
+  { key: 'verificacao', label: 'Verificacao' },
   { key: 'pais', label: 'Pais' },
   { key: 'dominios', label: 'Dominios', value: (r) => (r.dominios || []).join('|') },
   { key: 'paginas', label: 'Paginas', value: (r) => (r.paginas || []).join('|') },
@@ -145,6 +146,11 @@ export default function KanbanBMs() {
           metodoPagamento: row['Pagamento'] === 'sim',
           limiteDiario: row['Limite Diario'] || '',
           status: BM_STATUS_MAP[row['Status']]?.id || 'nova',
+          verificacao: ['nao_verificada', 'em_analise', 'verificada'].includes(
+            row['Verificacao'],
+          )
+            ? row['Verificacao']
+            : 'nao_verificada',
           pais: row['Pais'] || 'Brasil',
           dominios: (row['Dominios'] || '')
             .split('|')
@@ -156,7 +162,6 @@ export default function KanbanBMs() {
             .filter(Boolean),
           observacoes: row['Observacoes'] || '',
           tags: (row['Tags'] || '').split('|').map((t) => t.trim()).filter(Boolean),
-          prioridade: 'media',
           historico: [
             {
               id: `h_${Date.now()}_${idx}`,

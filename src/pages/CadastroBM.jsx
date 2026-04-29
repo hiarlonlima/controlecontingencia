@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Building2, Save } from 'lucide-react'
-import { BM_STATUSES, PRIORITIES } from '../utils/constants.js'
+import { BM_STATUSES, BM_VERIFICACOES } from '../utils/constants.js'
 import { useData } from '../context/DataContext.jsx'
 import { useToast } from '../context/ToastContext.jsx'
 import AdAccountsEditor from '../components/AdAccountsEditor.jsx'
@@ -17,7 +17,7 @@ const initialState = {
   metodoPagamento: false,
   limiteDiario: '',
   status: 'nova',
-  prioridade: 'media',
+  verificacao: 'nao_verificada',
   pais: 'Brasil',
   dominios: '',
   paginas: '',
@@ -143,18 +143,21 @@ export default function CadastroBM() {
               </select>
             </div>
             <div>
-              <label className="label mb-1.5 block">Prioridade</label>
+              <label className="label mb-1.5 block">Verificação Meta</label>
               <select
                 className="input"
-                value={form.prioridade}
-                onChange={(e) => set('prioridade', e.target.value)}
+                value={form.verificacao}
+                onChange={(e) => set('verificacao', e.target.value)}
               >
-                {PRIORITIES.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.label}
+                {BM_VERIFICACOES.map((v) => (
+                  <option key={v.id} value={v.id}>
+                    {v.label}
                   </option>
                 ))}
               </select>
+              <p className="mt-1 text-[11px] text-slate-500">
+                Mostra selo de verificado no card quando "Verificada".
+              </p>
             </div>
 
             <div>

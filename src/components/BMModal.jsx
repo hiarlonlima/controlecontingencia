@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Save, Trash2, Send, History, AlertTriangle } from 'lucide-react'
-import { BM_STATUSES, BM_STATUS_MAP, PRIORITIES } from '../utils/constants.js'
+import { BM_STATUSES, BM_STATUS_MAP, BM_VERIFICACOES } from '../utils/constants.js'
 import { formatDateTime } from '../utils/format.js'
 import { useData } from '../context/DataContext.jsx'
 import { useToast } from '../context/ToastContext.jsx'
@@ -214,18 +214,21 @@ export default function BMModal({ open, bm, onClose }) {
             </select>
           </div>
           <div>
-            <label className="label mb-1.5 block">Prioridade</label>
+            <label className="label mb-1.5 block">Verificação Meta</label>
             <select
               className="input"
-              value={form.prioridade}
-              onChange={(e) => set('prioridade', e.target.value)}
+              value={form.verificacao || 'nao_verificada'}
+              onChange={(e) => set('verificacao', e.target.value)}
             >
-              {PRIORITIES.map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.label}
+              {BM_VERIFICACOES.map((v) => (
+                <option key={v.id} value={v.id}>
+                  {v.label}
                 </option>
               ))}
             </select>
+            <p className="mt-1 text-[11px] text-slate-500">
+              Selo de verificado aparece no card quando "Verificada".
+            </p>
           </div>
 
           <div>

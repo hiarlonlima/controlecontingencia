@@ -1,11 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Save, UserPlus } from 'lucide-react'
-import {
-  CONFIDENCE_LEVELS,
-  PROFILE_STATUSES,
-  PRIORITIES,
-} from '../utils/constants.js'
+import { CONFIDENCE_LEVELS, PROFILE_STATUSES } from '../utils/constants.js'
 import { useData } from '../context/DataContext.jsx'
 import { useToast } from '../context/ToastContext.jsx'
 import PageHeader from '../components/PageHeader.jsx'
@@ -24,7 +20,6 @@ const initialState = {
   dataCriacaoFacebook: '',
   status: 'novo',
   nivelConfianca: 'medio',
-  prioridade: 'media',
   pais: 'Brasil',
   proxy: '',
   telefone: '',
@@ -152,7 +147,7 @@ export default function CadastroPerfil() {
               </select>
             </div>
 
-            <div>
+            <div className="md:col-span-2">
               <label className="label mb-1.5 block">
                 Fornecedor <span className="text-rose-300">*</span>
               </label>
@@ -165,20 +160,6 @@ export default function CadastroPerfil() {
               {errors.fornecedor && (
                 <p className="mt-1 text-xs text-rose-300">{errors.fornecedor}</p>
               )}
-            </div>
-            <div>
-              <label className="label mb-1.5 block">Prioridade</label>
-              <select
-                className="input"
-                value={form.prioridade}
-                onChange={(e) => set('prioridade', e.target.value)}
-              >
-                {PRIORITIES.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.label}
-                  </option>
-                ))}
-              </select>
             </div>
 
             <div>

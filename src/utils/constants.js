@@ -27,10 +27,11 @@ export const CONFIDENCE_LEVELS = [
   { id: 'alto', label: 'Alto', tone: 'emerald' },
 ]
 
-export const PRIORITIES = [
-  { id: 'baixa', label: 'Baixa', tone: 'slate' },
-  { id: 'media', label: 'Média', tone: 'amber' },
-  { id: 'alta', label: 'Alta', tone: 'rose' },
+// Estado de verificação Meta da BM (selo/em análise/não verificada)
+export const BM_VERIFICACOES = [
+  { id: 'nao_verificada', label: 'Não verificada', tone: 'slate' },
+  { id: 'em_analise', label: 'Em análise', tone: 'amber' },
+  { id: 'verificada', label: 'Verificada', tone: 'cyan' },
 ]
 
 // Status individual de cada conta de anúncio dentro de uma BM
@@ -59,7 +60,9 @@ export const BM_STATUS_MAP = Object.fromEntries(BM_STATUSES.map((s) => [s.id, s]
 export const CONFIDENCE_MAP = Object.fromEntries(
   CONFIDENCE_LEVELS.map((s) => [s.id, s]),
 )
-export const PRIORITY_MAP = Object.fromEntries(PRIORITIES.map((s) => [s.id, s]))
+export const BM_VERIFICACAO_MAP = Object.fromEntries(
+  BM_VERIFICACOES.map((v) => [v.id, v]),
+)
 export const AD_ACCOUNT_STATUS_MAP = Object.fromEntries(
   AD_ACCOUNT_STATUSES.map((s) => [s.id, s]),
 )
