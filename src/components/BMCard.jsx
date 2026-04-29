@@ -48,14 +48,16 @@ export default function BMCard({
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
           <p className="flex items-center gap-1.5 text-sm font-semibold text-slate-50">
-            <span className="truncate">{bm.nome || '—'}</span>
+            <span className="min-w-0 flex-shrink truncate">{bm.nome || '—'}</span>
             {isVerified && (
-              <BadgeCheck
-                size={14}
-                className="shrink-0 text-cyan-300"
+              <span
+                className="inline-flex shrink-0 items-center gap-1 rounded-md bg-cyan-500/15 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-cyan-300 ring-1 ring-cyan-500/30"
                 title="BM verificada pelo Meta"
                 aria-label="Verificada"
-              />
+              >
+                <BadgeCheck size={11} strokeWidth={2.5} />
+                Verificada
+              </span>
             )}
           </p>
           <p className="mt-0.5 flex items-center gap-1 truncate font-mono text-[11px] text-slate-500">
