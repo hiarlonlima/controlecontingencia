@@ -99,15 +99,56 @@ export const warmupBMs = {
   emoji: '🏢',
   title: 'Esteira de Aquecimento de BMs',
   description:
-    'Defina aqui sua sequência operacional pra preparar uma BM antes de subir campanha real (verificação, métodos de pagamento, vínculos).',
-  duration: '— dias',
-  steps: [],
-  emptyState: {
-    title: 'Esteira ainda não definida',
-    description:
-      'Quando você definir os passos da preparação de BM, eles aparecem aqui em formato de timeline. Por enquanto, as BMs são organizadas visualmente pelo Kanban (colunas "Nova" e "Em preparação").',
-    cta: { label: 'Abrir Kanban de BMs', href: '/kanban/bms' },
-  },
+    'Sequência operacional para preparar uma Business Manager nova antes de subir campanha real — criação, fan page, vínculos, verificação e admins de backup.',
+  duration: '4 dias',
+  steps: [
+    {
+      id: 'bm-dia-1',
+      day: 'Dia 1',
+      title: 'Criação e segurança',
+      tone: 'amber',
+      bullets: [
+        'Criar BM e preencher todos os dados básicos',
+        'Ativar 2FA no perfil dono',
+      ],
+      goal: 'Garantir que a BM nasce em estado seguro, com autenticação reforçada antes de qualquer vínculo.',
+    },
+    {
+      id: 'bm-dia-2',
+      day: 'Dia 2',
+      title: 'Ativos principais',
+      tone: 'amber',
+      bullets: [
+        'Criar Fan Page',
+        'Criar conta de anúncio',
+        'Criar Pixel',
+      ],
+    },
+    {
+      id: 'bm-dia-3',
+      day: 'Dia 3',
+      title: 'Configuração e vínculos',
+      tone: 'cyan',
+      bullets: [
+        'Configurar método de pagamento',
+        'Vincular ativos: Página + Pixel + Conta de Anúncio',
+        'Criar App para liberar a verificação da BM',
+      ],
+      goal: 'BM com identidade financeira e técnica completa, pronta para o processo de verificação.',
+    },
+    {
+      id: 'bm-dia-4',
+      day: 'Dia 4',
+      title: 'Verificação e operação',
+      tone: 'emerald',
+      bullets: [
+        'Adicionar admins de backup',
+        'Verificar a BM',
+        'Iniciar aquecimento estruturado das contas de anúncio',
+      ],
+      goal: 'BM verificada, com redundância de admins. A partir daqui as contas seguem para a esteira de aquecimento dedicada.',
+    },
+  ],
 }
 
 export const WARMUP_PLAYBOOKS = [warmupProfiles, warmupBMs, warmupAdAccounts]
