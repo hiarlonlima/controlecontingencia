@@ -26,7 +26,14 @@ const DataContext = createContext(null)
 
 // Migra status antigo (boa/mediana/ruim/bloqueada/preparacao) pra status (lifecycle)
 // + qualidade (performance) novos. Idempotente: status já no formato novo passa.
-const NEW_STATUSES = new Set(['criada', 'preparacao', 'aquecendo', 'usando', 'parada'])
+const NEW_STATUSES = new Set([
+  'criada',
+  'preparacao',
+  'aquecendo',
+  'usando',
+  'parada',
+  'bloqueada',
+])
 const NEW_QUALITIES = new Set(['iniciante', 'ruim', 'mediana', 'boa', 'escala'])
 
 function migrateAdAccountStatus(c) {
@@ -39,15 +46,14 @@ function migrateAdAccountStatus(c) {
   if (NEW_STATUSES.has(oldStatus)) {
     return { status: oldStatus, qualidade: c?.qualidade || 'iniciante' }
   }
-  // Mapeamento legado → (status, qualidade)
+  // Mapeamento legado → (status, qualidade). Note: 'bloqueada' já é
+  // status válido novo e cai nas early returns acima — não chega aqui.
   switch (oldStatus) {
     case 'boa':
       return { status: 'usando', qualidade: 'boa' }
     case 'mediana':
       return { status: 'usando', qualidade: 'mediana' }
     case 'ruim':
-      return { status: 'usando', qualidade: 'ruim' }
-    case 'bloqueada':
       return { status: 'usando', qualidade: 'ruim' }
     case 'preparacao':
     default:

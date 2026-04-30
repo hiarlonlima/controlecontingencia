@@ -53,6 +53,7 @@ export const AD_ACCOUNT_STATUSES = [
   { id: 'aquecendo', label: 'Aquecendo', tone: 'orange' },
   { id: 'usando', label: 'Usando', tone: 'emerald' },
   { id: 'parada', label: 'Parada', tone: 'rose' },
+  { id: 'bloqueada', label: 'Bloqueada', tone: 'zinc' },
 ]
 
 // Qualidade / performance da conta de anúncio
