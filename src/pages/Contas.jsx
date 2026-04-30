@@ -6,9 +6,9 @@ import {
   ExternalLink,
   Layers,
   ScrollText,
-  ShieldCheck,
   Sparkles,
   TrendingUp,
+  Wallet,
 } from 'lucide-react'
 import {
   AD_ACCOUNT_QUALITIES,
@@ -20,6 +20,11 @@ import {
   TONE_STYLES,
 } from '../utils/constants.js'
 import { useData } from '../context/DataContext.jsx'
+import {
+  formatMoney,
+  formatTotalsByCurrency,
+  sumGastoByCurrency,
+} from '../utils/format.js'
 import BMModal from '../components/BMModal.jsx'
 import EmptyState from '../components/EmptyState.jsx'
 import PageHeader from '../components/PageHeader.jsx'
@@ -124,6 +129,12 @@ export default function Contas() {
     [allAccounts],
   )
 
+  const totalsGasto = useMemo(
+    () => sumGastoByCurrency(allAccounts),
+    [allAccounts],
+  )
+  const totalsLabel = formatTotalsByCurrency(totalsGasto) || formatMoney(0, 'brl')
+
   function openBM(bmId) {
     const bm = bms.find((b) => b.id === bmId)
     if (bm) setBmModalOpen(bm)
@@ -161,6 +172,14 @@ export default function Contas() {
               highlight
             />
             <StatCard
+              icon={Wallet}
+              label="Total gasto"
+              value={totalsLabel}
+              tone="cyan"
+              hint="soma por moeda"
+              highlight
+            />
+            <StatCard
               icon={Activity}
               label="Em uso"
               value={statusCounts.usando || 0}
@@ -179,12 +198,6 @@ export default function Contas() {
               label="Boa qualidade"
               value={qualityCounts.boa || 0}
               tone="cyan"
-            />
-            <StatCard
-              icon={Layers}
-              label="Aquecendo"
-              value={statusCounts.aquecendo || 0}
-              tone="orange"
             />
             <StatCard
               icon={ScrollText}
@@ -283,6 +296,7 @@ export default function Contas() {
                   <th className="px-4 py-2.5 font-semibold">Qualidade</th>
                   <th className="px-4 py-2.5 font-semibold">Tier</th>
                   <th className="px-4 py-2.5 font-semibold">Moeda</th>
+                  <th className="px-4 py-2.5 text-right font-semibold">Gasto</th>
                   <th className="px-4 py-2.5 text-center font-semibold">Logs</th>
                   <th className="px-4 py-2.5 text-right font-semibold"> </th>
                 </tr>
@@ -290,7 +304,7 @@ export default function Contas() {
               <tbody className="divide-y divide-ink-700/40">
                 {filtered.length === 0 ? (
                   <tr>
-                    <td colSpan="8" className="px-4 py-8 text-center text-xs text-slate-500">
+                    <td colSpan="9" className="px-4 py-8 text-center text-xs text-slate-500">
                       Nenhuma conta corresponde aos filtros.
                     </td>
                   </tr>
@@ -332,6 +346,11 @@ export default function Contas() {
                             <span>{moeda.emoji}</span>
                             {moeda.label}
                           </span>
+                        </td>
+                        <td className="px-4 py-3 text-right font-mono text-xs tabular-nums text-slate-200">
+                          {ad.gasto > 0 ? formatMoney(ad.gasto, ad.moeda) : (
+                            <span className="text-slate-600">—</span>
+                          )}
                         </td>
                         <td className="px-4 py-3 text-center">
                           <span className="rounded-md bg-ink-800/80 px-1.5 py-0.5 text-[11px] tabular-nums text-slate-300">

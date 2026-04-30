@@ -74,6 +74,7 @@ function normalizeBM(bm) {
           qualidade: 'iniciante',
           tier: 't2',
           moeda: 'brl',
+          gasto: 0,
           observacao: '',
           logs: [],
         }
@@ -86,6 +87,7 @@ function normalizeBM(bm) {
         qualidade,
         tier: c?.tier ?? 't2',
         moeda: c?.moeda ?? 'brl',
+        gasto: Number(c?.gasto) || 0,
         observacao: c?.observacao ?? '',
         logs: Array.isArray(c?.logs) ? c.logs : [],
       }

@@ -7,6 +7,7 @@ import {
   Globe2,
   Hash,
   Users,
+  Wallet,
 } from 'lucide-react'
 import {
   AD_ACCOUNT_QUALITIES,
@@ -15,7 +16,13 @@ import {
   TAG_TONES,
   TONE_STYLES,
 } from '../utils/constants.js'
-import { daysBetween, formatDate, tagTone } from '../utils/format.js'
+import {
+  daysBetween,
+  formatDate,
+  formatTotalsByCurrency,
+  sumGastoByCurrency,
+  tagTone,
+} from '../utils/format.js'
 import { countAdAccountsBy } from './AdAccountsEditor.jsx'
 import StatusBadge from './StatusBadge.jsx'
 
@@ -35,6 +42,9 @@ export default function BMCard({
   const adCounts = countAdAccountsBy(bm.contasAnuncio, 'qualidade')
   const adTotal = bm.contasAnuncio?.length || 0
   const activeQualities = AD_ACCOUNT_QUALITIES.filter((q) => adCounts[q.id])
+  const totalsGasto = sumGastoByCurrency(bm.contasAnuncio)
+  const totalGastoLabel = formatTotalsByCurrency(totalsGasto)
+  const hasGasto = !!totalGastoLabel
   const verificacao = bm.verificacao || 'nao_verificada'
   const isVerified = verificacao === 'verificada'
   const isAnalyzing = verificacao === 'em_analise'
@@ -101,6 +111,18 @@ export default function BMCard({
         )}
         {bm.limiteDiario && <StatusBadge tone="cyan" label={bm.limiteDiario} />}
       </div>
+
+      {hasGasto && (
+        <div className="mt-2.5 flex items-center justify-between rounded-lg border border-neon-500/25 bg-neon-500/10 px-3 py-1.5">
+          <span className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-neon-300">
+            <Wallet size={11} />
+            Total gasto
+          </span>
+          <span className="font-mono text-xs font-semibold tabular-nums text-neon-200">
+            {totalGastoLabel}
+          </span>
+        </div>
+      )}
 
       {!compact && (
         <div className="mt-3 grid grid-cols-2 gap-y-1.5 text-[11px] text-slate-400">

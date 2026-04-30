@@ -71,3 +71,32 @@ export function tagTone(tag, palette) {
   const idx = Math.abs(hash) % palette.length
   return palette[idx]
 }
+
+// Formata valor monetário respeitando a moeda (brl → R$, usd → US$)
+export function formatMoney(value, moeda = 'brl') {
+  const v = Number(value) || 0
+  const isUSD = moeda === 'usd'
+  return new Intl.NumberFormat(isUSD ? 'en-US' : 'pt-BR', {
+    style: 'currency',
+    currency: isUSD ? 'USD' : 'BRL',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(v)
+}
+
+// Soma o gasto das contas de anúncio agrupado por moeda
+export function sumGastoByCurrency(accounts = []) {
+  return accounts.reduce((acc, a) => {
+    const moeda = a?.moeda || 'brl'
+    acc[moeda] = (acc[moeda] || 0) + (Number(a?.gasto) || 0)
+    return acc
+  }, {})
+}
+
+// Renderiza o total combinado em string ("R$ 12.500,00" ou "R$ 1.000 · US$ 200")
+export function formatTotalsByCurrency(totals) {
+  const parts = []
+  if (totals?.brl) parts.push(formatMoney(totals.brl, 'brl'))
+  if (totals?.usd) parts.push(formatMoney(totals.usd, 'usd'))
+  return parts.join(' · ')
+}

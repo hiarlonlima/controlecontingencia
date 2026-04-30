@@ -39,6 +39,7 @@ export default function AdAccountsEditor({ value = [], onChange }) {
         qualidade: 'iniciante',
         tier: 't2',
         moeda: 'brl',
+        gasto: 0,
         observacao: '',
       },
     ])
@@ -169,6 +170,19 @@ export default function AdAccountsEditor({ value = [], onChange }) {
                 </option>
               ))}
             </select>
+            <input
+              type="number"
+              step="0.01"
+              min="0"
+              value={Number.isFinite(acc.gasto) ? acc.gasto : 0}
+              onChange={(e) =>
+                update(idx, { gasto: parseFloat(e.target.value) || 0 })
+              }
+              placeholder="0,00"
+              className="input w-28 py-1.5 text-right text-xs tabular-nums"
+              aria-label="Valor gasto"
+              title="Valor gasto"
+            />
             <input
               value={acc.observacao || ''}
               onChange={(e) => update(idx, { observacao: e.target.value })}
