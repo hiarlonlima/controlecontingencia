@@ -46,16 +46,24 @@ export const BM_VERIFICACOES = [
   { id: 'verificada', label: 'Verificada', tone: 'cyan' },
 ]
 
-// Status individual de cada conta de anúncio dentro de uma BM
+// Status do ciclo de vida da conta de anúncio
 export const AD_ACCOUNT_STATUSES = [
+  { id: 'criada', label: 'Criada', tone: 'slate' },
   { id: 'preparacao', label: 'Em preparação', tone: 'amber' },
-  { id: 'boa', label: 'Boa', tone: 'emerald' },
-  { id: 'mediana', label: 'Mediana', tone: 'sky' },
-  { id: 'ruim', label: 'Ruim', tone: 'orange' },
-  { id: 'bloqueada', label: 'Bloqueada', tone: 'rose' },
+  { id: 'aquecendo', label: 'Aquecendo', tone: 'orange' },
+  { id: 'usando', label: 'Usando', tone: 'emerald' },
 ]
 
-// Tiers de conta de anúncio (escala de qualidade / spend)
+// Qualidade / performance da conta de anúncio
+export const AD_ACCOUNT_QUALITIES = [
+  { id: 'iniciante', label: 'Iniciante', tone: 'slate' },
+  { id: 'ruim', label: 'Ruim', tone: 'rose' },
+  { id: 'mediana', label: 'Mediana', tone: 'amber' },
+  { id: 'boa', label: 'Boa', tone: 'cyan' },
+  { id: 'escala', label: 'Escala', tone: 'emerald' },
+]
+
+// Tiers de conta de anúncio (faixa de spend)
 export const AD_ACCOUNT_TIERS = [
   { id: 't1', label: 'T1', tone: 'emerald' },
   { id: 't2', label: 'T2', tone: 'cyan' },
@@ -77,6 +85,9 @@ export const BM_VERIFICACAO_MAP = Object.fromEntries(
 )
 export const AD_ACCOUNT_STATUS_MAP = Object.fromEntries(
   AD_ACCOUNT_STATUSES.map((s) => [s.id, s]),
+)
+export const AD_ACCOUNT_QUALITY_MAP = Object.fromEntries(
+  AD_ACCOUNT_QUALITIES.map((q) => [q.id, q]),
 )
 export const AD_ACCOUNT_TIER_MAP = Object.fromEntries(
   AD_ACCOUNT_TIERS.map((t) => [t.id, t]),

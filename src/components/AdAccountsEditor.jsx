@@ -1,5 +1,7 @@
 import { Plus, Trash2 } from 'lucide-react'
 import {
+  AD_ACCOUNT_QUALITIES,
+  AD_ACCOUNT_QUALITY_MAP,
   AD_ACCOUNT_STATUSES,
   AD_ACCOUNT_STATUS_MAP,
   AD_ACCOUNT_TIERS,
@@ -7,24 +9,25 @@ import {
   TONE_STYLES,
 } from '../utils/constants.js'
 
-export function countAdAccountsByStatus(accounts = []) {
+export function countAdAccountsBy(accounts = [], field) {
   return accounts.reduce((acc, a) => {
-    const key = a?.status || 'preparacao'
+    const key = a?.[field] || ''
+    if (!key) return acc
     acc[key] = (acc[key] || 0) + 1
     return acc
   }, {})
 }
 
 export function adAccountsSummary(accounts = []) {
-  const counts = countAdAccountsByStatus(accounts)
-  return AD_ACCOUNT_STATUSES
-    .filter((s) => counts[s.id])
-    .map((s) => `${counts[s.id]} ${s.label.toLowerCase()}`)
+  const counts = countAdAccountsBy(accounts, 'qualidade')
+  return AD_ACCOUNT_QUALITIES.filter((q) => counts[q.id])
+    .map((q) => `${counts[q.id]} ${q.label.toLowerCase()}`)
     .join(' · ')
 }
 
 export default function AdAccountsEditor({ value = [], onChange }) {
-  const counts = countAdAccountsByStatus(value)
+  const statusCounts = countAdAccountsBy(value, 'status')
+  const qualityCounts = countAdAccountsBy(value, 'qualidade')
 
   function add() {
     onChange?.([
@@ -32,7 +35,8 @@ export default function AdAccountsEditor({ value = [], onChange }) {
       {
         nome: '',
         id: '',
-        status: 'preparacao',
+        status: 'criada',
+        qualidade: 'iniciante',
         tier: 't2',
         moeda: 'brl',
         observacao: '',
@@ -49,11 +53,11 @@ export default function AdAccountsEditor({ value = [], onChange }) {
   return (
     <div className="space-y-2">
       {value.length > 0 && (
-        <div className="flex flex-wrap items-center gap-1.5 rounded-lg border border-ink-700/50 bg-ink-850/40 px-3 py-2">
+        <div className="flex flex-wrap items-center gap-3 rounded-lg border border-ink-700/50 bg-ink-850/40 px-3 py-2">
           <span className="text-[11px] uppercase tracking-wider text-slate-500">
             {value.length} {value.length === 1 ? 'conta' : 'contas'}
           </span>
-          {AD_ACCOUNT_STATUSES.filter((s) => counts[s.id]).map((s) => {
+          {AD_ACCOUNT_STATUSES.filter((s) => statusCounts[s.id]).map((s) => {
             const tone = TONE_STYLES[s.tone]
             return (
               <span
@@ -61,7 +65,20 @@ export default function AdAccountsEditor({ value = [], onChange }) {
                 className={`chip ${tone.bg} ${tone.border} ${tone.text}`}
               >
                 <span className={`h-1.5 w-1.5 rounded-full ${tone.dot}`} />
-                {counts[s.id]} {s.label.toLowerCase()}
+                {statusCounts[s.id]} {s.label.toLowerCase()}
+              </span>
+            )
+          })}
+          <span className="h-3 w-px bg-ink-700" />
+          {AD_ACCOUNT_QUALITIES.filter((q) => qualityCounts[q.id]).map((q) => {
+            const tone = TONE_STYLES[q.tone]
+            return (
+              <span
+                key={q.id}
+                className={`chip ${tone.bg} ${tone.border} ${tone.text}`}
+              >
+                <span className={`h-1.5 w-1.5 rounded-full ${tone.dot}`} />
+                {qualityCounts[q.id]} {q.label.toLowerCase()}
               </span>
             )
           })}
@@ -75,7 +92,7 @@ export default function AdAccountsEditor({ value = [], onChange }) {
       )}
 
       {value.map((acc, idx) => {
-        const status = AD_ACCOUNT_STATUS_MAP[acc.status] ?? AD_ACCOUNT_STATUS_MAP.preparacao
+        const status = AD_ACCOUNT_STATUS_MAP[acc.status] ?? AD_ACCOUNT_STATUS_MAP.criada
         const statusTone = TONE_STYLES[status.tone]
         return (
           <div
@@ -105,6 +122,7 @@ export default function AdAccountsEditor({ value = [], onChange }) {
               onChange={(e) => update(idx, { status: e.target.value })}
               className="input w-36 py-1.5 text-xs"
               aria-label="Status da conta"
+              title="Status"
             >
               {AD_ACCOUNT_STATUSES.map((s) => (
                 <option key={s.id} value={s.id}>
@@ -113,10 +131,24 @@ export default function AdAccountsEditor({ value = [], onChange }) {
               ))}
             </select>
             <select
+              value={acc.qualidade || 'iniciante'}
+              onChange={(e) => update(idx, { qualidade: e.target.value })}
+              className="input w-32 py-1.5 text-xs"
+              aria-label="Qualidade"
+              title="Qualidade"
+            >
+              {AD_ACCOUNT_QUALITIES.map((q) => (
+                <option key={q.id} value={q.id}>
+                  {q.label}
+                </option>
+              ))}
+            </select>
+            <select
               value={acc.tier}
               onChange={(e) => update(idx, { tier: e.target.value })}
               className="input w-24 py-1.5 text-xs"
               aria-label="Tier da conta"
+              title="Tier"
             >
               {AD_ACCOUNT_TIERS.map((t) => (
                 <option key={t.id} value={t.id}>
@@ -166,4 +198,9 @@ export default function AdAccountsEditor({ value = [], onChange }) {
       </button>
     </div>
   )
+}
+
+// Backwards compat: alguns componentes ainda usam countAdAccountsByStatus
+export function countAdAccountsByStatus(accounts = []) {
+  return countAdAccountsBy(accounts, 'qualidade')
 }

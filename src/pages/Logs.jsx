@@ -9,6 +9,7 @@ import {
 import { useData } from '../context/DataContext.jsx'
 import { useToast } from '../context/ToastContext.jsx'
 import {
+  AD_ACCOUNT_QUALITY_MAP,
   AD_ACCOUNT_STATUS_MAP,
   AD_ACCOUNT_TIER_MAP,
   MOEDA_MAP,
@@ -43,7 +44,9 @@ function LogEntry({ log, onDelete }) {
 
 function AdAccountLogRow({ ad, onAddLog, onDeleteLog }) {
   const [text, setText] = useState('')
-  const status = AD_ACCOUNT_STATUS_MAP[ad.status] ?? AD_ACCOUNT_STATUS_MAP.preparacao
+  const status = AD_ACCOUNT_STATUS_MAP[ad.status] ?? AD_ACCOUNT_STATUS_MAP.criada
+  const qualidade =
+    AD_ACCOUNT_QUALITY_MAP[ad.qualidade] ?? AD_ACCOUNT_QUALITY_MAP.iniciante
   const tier = AD_ACCOUNT_TIER_MAP[ad.tier] ?? AD_ACCOUNT_TIER_MAP.t2
   const moeda = MOEDA_MAP[ad.moeda] ?? MOEDA_MAP.brl
   const logs = ad.logs || []
@@ -76,6 +79,7 @@ function AdAccountLogRow({ ad, onAddLog, onDeleteLog }) {
         </div>
         <div className="flex flex-wrap items-center gap-1.5">
           <StatusBadge tone={status.tone} label={status.label} />
+          <StatusBadge tone={qualidade.tone} label={qualidade.label} />
           <StatusBadge tone={tier.tone} dot={false} label={tier.label} />
           <StatusBadge
             tone={moeda.tone}

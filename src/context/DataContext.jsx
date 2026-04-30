@@ -24,6 +24,37 @@ import { useToast } from './ToastContext.jsx'
 
 const DataContext = createContext(null)
 
+// Migra status antigo (boa/mediana/ruim/bloqueada/preparacao) pra status (lifecycle)
+// + qualidade (performance) novos. Idempotente: status já no formato novo passa.
+const NEW_STATUSES = new Set(['criada', 'preparacao', 'aquecendo', 'usando'])
+const NEW_QUALITIES = new Set(['iniciante', 'ruim', 'mediana', 'boa', 'escala'])
+
+function migrateAdAccountStatus(c) {
+  const oldStatus = c?.status
+  // Se já está no formato novo e qualidade existe, devolve como veio
+  if (NEW_STATUSES.has(oldStatus) && NEW_QUALITIES.has(c?.qualidade)) {
+    return { status: oldStatus, qualidade: c.qualidade }
+  }
+  // Se status novo mas qualidade ausente, default qualidade
+  if (NEW_STATUSES.has(oldStatus)) {
+    return { status: oldStatus, qualidade: c?.qualidade || 'iniciante' }
+  }
+  // Mapeamento legado → (status, qualidade)
+  switch (oldStatus) {
+    case 'boa':
+      return { status: 'usando', qualidade: 'boa' }
+    case 'mediana':
+      return { status: 'usando', qualidade: 'mediana' }
+    case 'ruim':
+      return { status: 'usando', qualidade: 'ruim' }
+    case 'bloqueada':
+      return { status: 'usando', qualidade: 'ruim' }
+    case 'preparacao':
+    default:
+      return { status: 'preparacao', qualidade: 'iniciante' }
+  }
+}
+
 // Migra contas de anúncio do formato antigo (string) pro novo (objeto).
 function normalizeBM(bm) {
   return {
@@ -34,16 +65,19 @@ function normalizeBM(bm) {
           nome: '',
           id: c,
           status: 'preparacao',
+          qualidade: 'iniciante',
           tier: 't2',
           moeda: 'brl',
           observacao: '',
           logs: [],
         }
       }
+      const { status, qualidade } = migrateAdAccountStatus(c)
       return {
         nome: c?.nome ?? '',
         id: c?.id ?? '',
-        status: c?.status ?? 'preparacao',
+        status,
+        qualidade,
         tier: c?.tier ?? 't2',
         moeda: c?.moeda ?? 'brl',
         observacao: c?.observacao ?? '',

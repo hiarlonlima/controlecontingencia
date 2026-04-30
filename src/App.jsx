@@ -5,6 +5,7 @@ import Aquecimentos from './pages/Aquecimentos.jsx'
 import CadastroBM from './pages/CadastroBM.jsx'
 import CadastroPerfil from './pages/CadastroPerfil.jsx'
 import Configuracoes from './pages/Configuracoes.jsx'
+import Contas from './pages/Contas.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import KanbanBMs from './pages/KanbanBMs.jsx'
 import KanbanProfiles from './pages/KanbanProfiles.jsx'
@@ -27,6 +28,7 @@ export default function App() {
         <Route index element={<Dashboard />} />
         <Route path="kanban/perfis" element={<KanbanProfiles />} />
         <Route path="kanban/bms" element={<KanbanBMs />} />
+        <Route path="contas" element={<Contas />} />
         <Route path="cadastro/perfil" element={<CadastroPerfil />} />
         <Route path="cadastro/bm" element={<CadastroBM />} />
         <Route path="aquecimentos" element={<Aquecimentos />} />

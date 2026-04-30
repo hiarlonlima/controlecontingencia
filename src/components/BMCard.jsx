@@ -9,14 +9,14 @@ import {
   Users,
 } from 'lucide-react'
 import {
-  AD_ACCOUNT_STATUSES,
+  AD_ACCOUNT_QUALITIES,
   BM_STATUS_MAP,
   NACIONALIDADE_MAP,
   TAG_TONES,
   TONE_STYLES,
 } from '../utils/constants.js'
 import { daysBetween, formatDate, tagTone } from '../utils/format.js'
-import { countAdAccountsByStatus } from './AdAccountsEditor.jsx'
+import { countAdAccountsBy } from './AdAccountsEditor.jsx'
 import StatusBadge from './StatusBadge.jsx'
 
 export default function BMCard({
@@ -32,9 +32,9 @@ export default function BMCard({
   const idleDays = daysBetween(bm.updatedAt)
   const showAlert =
     idleDays >= alertDaysIdle && !['bloqueada', 'perdida'].includes(bm.status)
-  const adCounts = countAdAccountsByStatus(bm.contasAnuncio)
+  const adCounts = countAdAccountsBy(bm.contasAnuncio, 'qualidade')
   const adTotal = bm.contasAnuncio?.length || 0
-  const activeStatuses = AD_ACCOUNT_STATUSES.filter((s) => adCounts[s.id])
+  const activeQualities = AD_ACCOUNT_QUALITIES.filter((q) => adCounts[q.id])
   const verificacao = bm.verificacao || 'nao_verificada'
   const isVerified = verificacao === 'verificada'
   const isAnalyzing = verificacao === 'em_analise'
@@ -111,8 +111,8 @@ export default function BMCard({
           <span
             className="flex items-center gap-1.5 justify-self-end"
             title={
-              activeStatuses.length
-                ? activeStatuses
+              activeQualities.length
+                ? activeQualities
                     .map((s) => `${adCounts[s.id]} ${s.label.toLowerCase()}`)
                     .join(' · ')
                 : 'Sem contas vinculadas'
@@ -120,9 +120,9 @@ export default function BMCard({
           >
             <CreditCard size={11} />
             <span>{adTotal} ADs</span>
-            {activeStatuses.length > 0 && (
+            {activeQualities.length > 0 && (
               <span className="ml-0.5 inline-flex items-center gap-0.5">
-                {activeStatuses.map((s) => {
+                {activeQualities.map((s) => {
                   const tone = TONE_STYLES[s.tone]
                   return (
                     <span
@@ -147,7 +147,7 @@ export default function BMCard({
 
       {!compact && adTotal > 0 && (
         <div className="mt-2 flex flex-wrap gap-1">
-          {activeStatuses.map((s) => {
+          {activeQualities.map((s) => {
             const tone = TONE_STYLES[s.tone]
             return (
               <span
