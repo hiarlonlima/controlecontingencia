@@ -26,7 +26,7 @@ const DataContext = createContext(null)
 
 // Migra status antigo (boa/mediana/ruim/bloqueada/preparacao) pra status (lifecycle)
 // + qualidade (performance) novos. Idempotente: status já no formato novo passa.
-const NEW_STATUSES = new Set(['criada', 'preparacao', 'aquecendo', 'usando'])
+const NEW_STATUSES = new Set(['criada', 'preparacao', 'aquecendo', 'usando', 'parada'])
 const NEW_QUALITIES = new Set(['iniciante', 'ruim', 'mediana', 'boa', 'escala'])
 
 function migrateAdAccountStatus(c) {

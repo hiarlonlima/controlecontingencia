@@ -52,6 +52,7 @@ export const AD_ACCOUNT_STATUSES = [
   { id: 'preparacao', label: 'Em preparação', tone: 'amber' },
   { id: 'aquecendo', label: 'Aquecendo', tone: 'orange' },
   { id: 'usando', label: 'Usando', tone: 'emerald' },
+  { id: 'parada', label: 'Parada', tone: 'rose' },
 ]
 
 // Qualidade / performance da conta de anúncio
